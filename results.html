@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+
+  <title>Frontend Mentor | Typing Speed Test</title>
+</head>
+<body class="results-page">
+  <header>
+    <div class="top-header">
+      <div class="title">
+        <img id="logo" src="assets/images/logo-large.svg" alt="Typing Speed Test">
+      </div>
+      <div class="mobile-title">
+        <img id="logo" src="assets/images/logo-small.svg" alt="Typing Speed Test">
+      </div>
+
+      <div class="personal-best-text-container">
+        <h5 id="pb-text">
+          <img id="personal-best-img" src="assets/images/icon-personal-best.svg" alt="">
+          Personal Best: <strong>92 WPM</strong>
+        </h5>
+      </div>
+
+      <div class="mobile-personal-best-text-container">
+        <h5 id="pb-text">
+          <img id="personal-best-img" src="assets/images/icon-personal-best.svg" alt="">
+          Best: <strong>92 WPM</strong>
+        </h5>
+      </div>
+    </div>
+  </header>
+
+  <main class="results-main">
+    <section class="results-card">
+      <img class="results-confetti" src="assets/images/pattern-confetti.svg" alt="">
+      <img class="results-star results-star-red" src="assets/images/pattern-star-2.svg" alt="">
+      <img class="results-star results-star-gold" src="assets/images/pattern-star-1.svg" alt="">
+
+      <div class="results-icon">
+        <img id="results-icon-img" src="assets/images/icon-completed.svg" alt="Completed">
+      </div>
+
+      <h1 class="results-title" id="results-title">Test Complete!</h1>
+      <p class="results-subtitle" id="results-subtitle">Solid run. Keep pushing to beat your high score.</p>
+
+      <div class="results-stats">
+        <div class="stat-box">
+          <span class="stat-label">WPM:</span>
+          <span class="stat-value" id="result-wpm">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Accuracy:</span>
+          <span class="stat-value stat-accuracy" id="result-accuracy">0%</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Characters</span>
+          <span class="stat-value">
+            <span class="good" id="result-correct">0</span>
+            <span class="slash">/</span>
+            <span class="bad" id="result-incorrect">0</span>
+          </span>
+        </div>
+      </div>
+
+      <button class="go-again-btn" type="button" id="results-cta">
+        Go Again
+        <img src="assets/images/icon-restart-black.png" alt="">
+      </button>
+    </section>
+  </main>
+
+  <footer class="test-footer">
+    <div class="attribution">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>.
+      Coded by <a href="#">Clare Stevenson</a>.
+    </div>
+  </footer>
+
+  <script>
+    const saved = localStorage.getItem("typingResults");
+    const pbKey = "personalBestWpm";
+    const pbEl = document.querySelector(".personal-best-text-container strong");
+    const mobilePbEl = document.querySelector(".mobile-personal-best-text-container strong");
+    const bodyEl = document.body;
+
+    if (saved) {
+      try {
+        const results = JSON.parse(saved);
+        const wpmEl = document.getElementById("result-wpm");
+        const accuracyEl = document.getElementById("result-accuracy");
+        const correctEl = document.getElementById("result-correct");
+        const incorrectEl = document.getElementById("result-incorrect");
+
+        if (wpmEl) wpmEl.textContent = results.wpm ?? 0;
+        if (accuracyEl) accuracyEl.textContent = `${results.accuracy ?? 0}%`;
+        if (correctEl) correctEl.textContent = results.correct ?? 0;
+        if (incorrectEl) incorrectEl.textContent = results.incorrect ?? 0;
+
+        const storedBest = localStorage.getItem(pbKey);
+        const currentBest = Number(storedBest || 0);
+        const isFirstTest = storedBest === null;
+        const newBest = Math.max(currentBest, Number(results.wpm || 0));
+        const isNewBest = Number(results.wpm || 0) > currentBest;
+
+        localStorage.setItem(pbKey, String(newBest));
+
+        if (pbEl) pbEl.textContent = `${newBest} WPM`;
+        if (mobilePbEl) mobilePbEl.textContent = `${newBest} WPM`;
+
+        if (isFirstTest) {
+          const titleEl = document.getElementById("results-title");
+          const subtitleEl = document.getElementById("results-subtitle");
+          const ctaEl = document.getElementById("results-cta");
+
+          if (titleEl) titleEl.textContent = "Baseline Established!";
+          if (subtitleEl) subtitleEl.textContent = "You've set the bar. Now the real challenge begins! Can you beat it?";
+          if (ctaEl) ctaEl.childNodes[0].textContent = "Beat This Score";
+        } else if (isNewBest) {
+          bodyEl.classList.add("results-personal-best");
+          const titleEl = document.getElementById("results-title");
+          const subtitleEl = document.getElementById("results-subtitle");
+          const iconImg = document.getElementById("results-icon-img");
+          const ctaEl = document.getElementById("results-cta");
+
+          if (titleEl) titleEl.textContent = "High Score Smashed!";
+          if (subtitleEl) subtitleEl.textContent = "You're getting faster. That was incredible typing.";
+          if (iconImg) {
+            iconImg.src = "assets/images/icon-new-pb.svg";
+            iconImg.alt = "New personal best";
+          }
+          if (ctaEl) ctaEl.childNodes[0].textContent = "Beat This Score";
+        }
+      } catch (err) {
+        console.error("Failed to parse results:", err);
+      }
+    }
+
+    const ctaButton = document.getElementById("results-cta");
+    if (ctaButton) {
+      ctaButton.addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!--Home (not started) Home (started)Focus / hover states-->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="script.js" defer></script>
+
+  <!--font-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+  
+<title>Frontend Mentor | Typing Speed Test</title>
+</head>
+
+<body>
+  <header>
+    <div class="top-header">
+      <div class="title">
+        <img id="logo" src="assets/images/logo-large.svg">
+      </div>
+      <div class="mobile-title">
+        <img id="logo" src="assets/images/logo-small.svg">
+      </div>
+      
+    <div class="personal-best-text-container">
+  <h5 id="pb-text">
+    <img id="personal-best-img" src="assets/images/icon-personal-best.svg">
+    Personal Best: <strong>0</strong>
+  </h5>
+</div>
+
+<div class="mobile-personal-best-text-container">
+  <h5 id="pb-text">
+    <img id="personal-best-img" src="assets/images/icon-personal-best.svg">
+    Best: <strong>0 WPM</strong>
+  </h5>
+</div>
+
+  </div>
+
+
+   <div class="main-content">
+
+  <!-- Desktop stats -->
+  <div class="stats">
+    <span>WPM: <strong id="wpm">0</strong></span>
+    <span>Accuracy:<strong id="accuracy">100%</strong></span>
+    <span>Time:<strong id="time">60s</strong></span>
+  </div>
+
+
+  <!-- Desktop controls -->
+  <div class="control-group">
+    <div role="group" aria-label="Difficulty">
+      <span class="label">Difficulty:</span>
+      <button class="chip" data-value="easy">Easy</button>
+      <button class="chip" data-value="medium">Medium</button>
+      <button class="chip active" aria-pressed="true" data-value="hard">Hard</button>
+    </div>
+
+    <div role="group" aria-label="Mode">
+      <span class="label">Mode:</span>
+      <button class="chip active" aria-pressed="true">Timed (60s)</button>
+      <button class="chip">Passage</button>
+    </div>
+  </div>
+
+  <!-- Mobile controls dropdown -->
+  <div class="control-dropdown">
+    <div class="dropdown" data-type="difficulty">
+      <button type="button" class="dropdown-toggle" aria-haspopup="listbox" aria-expanded="false">
+        Hard
+      </button>
+      <div class="dropdown-menu" role="listbox" aria-label="Difficulty">
+        <button type="button" class="dropdown-option" role="option" data-value="easy">Easy</button>
+        <button type="button" class="dropdown-option" role="option" data-value="medium">Medium</button>
+        <button type="button" class="dropdown-option selected" role="option" data-value="hard" aria-selected="true">Hard</button>
+      </div>
+      <select id="difficulty-select" class="native-select" aria-hidden="true" tabindex="-1">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard" selected>Hard</option>
+      </select>
+    </div>
+
+    <div class="dropdown" data-type="mode">
+      <button type="button" class="dropdown-toggle" aria-haspopup="listbox" aria-expanded="false">
+        Timed (60s)
+      </button>
+      <div class="dropdown-menu" role="listbox" aria-label="Mode">
+        <button type="button" class="dropdown-option selected" role="option" data-value="timed" aria-selected="true">Timed (60s)</button>
+        <button type="button" class="dropdown-option" role="option" data-value="passage">Passage</button>
+      </div>
+      <select id="mode-select" class="native-select" aria-hidden="true" tabindex="-1">
+        <option value="timed" selected>Timed (60s)</option>
+        <option value="passage">Passage</option>
+      </select>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+    </div>
+
+  </header>
+
+<main>
+  <div class="text-container">
+    <div class="content-blurred">
+<p id="test-text" class="test-text" tabindex="0"></p>
+    </div>
+<div class="focus-wrapper">
+  <div class="focus-overlay"></div>
+
+  <div class="typing-card">
+    
+    <!-- passage + start button -->
+  </div>
+</div>
+
+    <div class="start-btn-overlay">
+      <button type="button" class="start-btn">Start Typing Test</button>
+      <p class="text-passage"> Or click the text and start typing </p>
+    </div>
+
+    <div class="restart-wrap">
+      <button type="button" class="restart-btn">
+        Restart Test
+        <img class="restart-icon" src="assets/images/icon-restart.svg" alt="" aria-hidden="true">
+      </button>
+    </div>
+
+  </div>
+</main>
+
+  <footer class="test-footer">
+ <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
+    Coded by <a href="#">Clare Stevenson</a>.
+  </div>
+ </footer>
+
+</div>
+
+<script>
+  const pbKey = "personalBestWpm";
+  const pbValue = localStorage.getItem(pbKey);
+  if (pbValue) {
+    const pbEl = document.querySelector(".personal-best-text-container strong");
+    const mobilePbEl = document.querySelector(".mobile-personal-best-text-container strong");
+    if (pbEl) pbEl.textContent = `${pbValue} WPM`;
+    if (mobilePbEl) mobilePbEl.textContent = `${pbValue} WPM`;
+  }
+</script>
+</body>
+</html>
+
+
+ 
+<!--
+typing-speed-test/
+├── index.html        # Test screen (all breakpoints)
+├── results.html      # Results screen (all breakpoints)
+│
+├── css/
+│   └── styles.css    # Responsive styles
+│
+├── js/
+│   └── script.js     # App logic & state
+│
+└── assets/
+-->
